@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# BASICS
+apt-get -y install nano curl
+
 # Update installed packages
 apt-get update && apt-get -y upgrade
 

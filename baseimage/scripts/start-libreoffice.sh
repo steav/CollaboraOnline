@@ -24,5 +24,17 @@ perl -pi -e "s/localhost<\/host>/${domain}<\/host>/g" /etc/loolwsd/loolwsd.xml
 perl -pi -e "s/<username desc=\"The username of the admin console. Must be set.\"><\/username>/<username desc=\"The username of the admin console. Must be set.\">${username}<\/username>/" /etc/loolwsd/loolwsd.xml
 perl -pi -e "s/<password desc=\"The password of the admin console. Must be set.\"><\/password>/<password desc=\"The password of the admin console. Must be set.\">${password}<\/password>/g" /etc/loolwsd/loolwsd.xml
 
+# Create logfile, otherwise permission denied
+rm -f /var/log/loolwsd.log 
+touch /var/log/loolwsd.log 
+chmod 777 /var/log/loolwsd.log 
+
+# Replace log settings inf loolwsd
+perl -pi -e "s/warning<\/level>/debug<\/level>/g" /etc/loolwsd/loolwsd.xml
+perl -pi -e "s/<file enable=\"false\">/<file enable=\"true\">/g" /etc/loolwsd/loolwsd.xml
+
+# Max doc size 50 MB
+perl -pi -e "s/0<\/max_file_size>/50000000<\/max_file_size>/g" /etc/loolwsd/loolwsd.xml
+
 # Start loolwsd
 su -c "/usr/bin/loolwsd --version --o:sys_template_path=/opt/lool/systemplate --o:lo_template_path=/opt/collaboraoffice5.1 --o:child_root_path=/opt/lool/child-roots --o:file_server_root_path=/usr/share/loolwsd" -s /bin/bash lool
